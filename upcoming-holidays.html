@@ -3,203 +3,233 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Today's Holidays in the United States</title>
+    <title>Upcoming Holidays in the United States</title>
 </head>
 <body>
-    <!-- Container where the holiday calculator will be inserted -->
-    <div id="CalculatorContainer"></div>
+    <!-- Container for the holiday calculator -->
+    <div id="HolidayContainer"></div>
 
     <script>
-        // Target the specific container
-        const container = document.getElementById('CalculatorContainer');
-        
-        // Insert the HTML structure into our container
-        container.innerHTML = `
-            <div class="holidays-content">
-            
-                
-                <h1 class="holidays-title">Today's Holidays in the United States</h1>
-                
-                <div id="today-holidays-container" class="holidays-results"></div>
-                
-                <p class="disclaimer">Holidays are calculated using the local time in New York.</p>
-            </div>
-        `;
-
-        // Add scoped CSS styles
-        const style = document.createElement('style');
-        style.textContent = `
-            /* Base container styles */
-            #CalculatorContainer {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                max-width: 100%;
-                box-sizing: border-box;
-            }
-            
-            /* Content wrapper */
-            #CalculatorContainer .holidays-content {
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 20px;
-            }
-            
-            /* Title styles */
-            #CalculatorContainer .holidays-title {
-                color: #ad2a24;
-                line-height: 1.3;
-                margin: 0 0 20px 0;
-                font-size: 28px;
-            }
-        
-            /* Holiday box styles */
-            #CalculatorContainer .hero-box {
-                background-color: #f8e8e8;
-                border-left: 5px solid #ad2a24;
-                padding: 25px;
-                margin: 0 0 30px 0;
-                border-radius: 0 5px 5px 0;
-            }
-        
-            #CalculatorContainer .hero-box h2 {
-                color: #ad2a24;
-                margin: 0 0 15px 0;
-                font-size: 22px;
-            }
-        
-            /* List styles */
-            #CalculatorContainer .holiday-list {
-                list-style-type: none;
-                padding: 0;
-                margin: 0;
-            }
-        
-            #CalculatorContainer .holiday-list li {
-                margin: 0 0 15px 0;
-                padding: 0 0 0 25px;
-                position: relative;
-                font-size: 18px;
-                line-height: 1.5;
-            }
-        
-            #CalculatorContainer .holiday-list li:before {
-                content: "🎉";
-                position: absolute;
-                left: 0;
-                top: 0;
-            }
-        
-            /* Link styles */
-            #CalculatorContainer .holiday-link {
-                color: #ad2a24;
-                text-decoration: none;
-                font-weight: 600;
-            }
-        
-            #CalculatorContainer .holiday-link:hover {
-                text-decoration: underline;
-            }
-        
-            /* Type and details styles */
-            #CalculatorContainer .holiday-type {
-                color: #7f8c8d;
-                font-style: italic;
-                font-size: 0.9em;
-            }
-        
-            #CalculatorContainer .holiday-details {
-                display: block;
-                color: #555;
-                font-size: 16px;
-                margin: 5px 0 0 0;
-            }
-        
-            /* No holiday styles */
-            #CalculatorContainer .no-holiday {
-                background-color: #f9f9f9;
-                padding: 20px;
-                border-radius: 5px;
-                text-align: center;
-                margin: 0 0 30px 0;
-            }
-        
-            #CalculatorContainer .no-holiday p {
-                font-size: 18px;
-                color: #7f8c8d;
-                margin: 0 0 10px 0;
-            }
-        
-            /* Disclaimer styles */
-            #CalculatorContainer .disclaimer {
-                font-size: 14px;
-                color: #95a5a6;
-                font-style: italic;
-                text-align: center;
-                margin: 40px 0 0 0;
-            }
-        
-            /* Logo styles */
-            #CalculatorContainer .logo {
-                text-align: center;
-                margin: 0 0 30px 0;
-            }
-        
-            #CalculatorContainer .logo img {
-                max-width: 100%;
-                height: auto;
-                max-height: 60px;
-            }
-        
-            /* Mobile responsiveness */
-            @media (max-width: 768px) {
-                #CalculatorContainer .holidays-content {
-                    padding: 15px;
+        // Inject our content into the specific container
+        document.getElementById('HolidayContainer').innerHTML = `
+        <div class="holiday-calculator">
+            <style>
+                #HolidayContainer {
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    line-height: 1.6;
+                    color: #333;
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    padding: 20px;
                 }
                 
-                #CalculatorContainer .holidays-title {
-                    font-size: 24px;
+                #HolidayContainer .holiday-calculator h1 {
+                    color: #2c3e50;
+                    text-align: center;
+                    margin-bottom: 20px;
                 }
                 
-                #CalculatorContainer .hero-box {
-                    padding: 20px 15px;
+                #HolidayContainer .logo {
+                    text-align: center;
+                    margin-bottom: 30px;
                 }
                 
-                #CalculatorContainer .holiday-list li {
-                    font-size: 16px;
+                #HolidayContainer .logo img {
+                    max-width: 200px;
+                    height: auto;
                 }
                 
-                #CalculatorContainer .no-holiday {
-                    padding: 15px;
-                }
-            }
-        
-            @media (max-width: 480px) {
-                #CalculatorContainer .holidays-content {
-                    padding: 10px;
+                #HolidayContainer .holiday-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin: 25px 0;
+                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                    background-color: white;
                 }
                 
-                #CalculatorContainer .holidays-title {
-                    font-size: 20px;
+                #HolidayContainer .holiday-table th {
+                    background-color: #3498db;
+                    color: white;
+                    text-align: left;
+                    padding: 12px 15px;
+                    position: sticky;
+                    top: 0;
                 }
                 
-                #CalculatorContainer .holiday-list li {
-                    font-size: 15px;
-                    padding-left: 20px;
+                #HolidayContainer .holiday-table td {
+                    padding: 12px 15px;
+                    border-bottom: 1px solid #dddddd;
                 }
                 
-                #CalculatorContainer .hero-box h2 {
-                    font-size: 18px;
+                #HolidayContainer .holiday-table tr:nth-of-type(even) {
+                    background-color: #f3f3f3;
                 }
                 
-                #CalculatorContainer .holiday-details {
+                #HolidayContainer .holiday-table tr:last-of-type {
+                    border-bottom: 2px solid #3498db;
+                }
+                
+                #HolidayContainer .holiday-table tr:hover {
+                    background-color: #e8f4f8;
+                }
+                
+                #HolidayContainer .holiday-link {
+                    color: #2980b9;
+                    text-decoration: none;
+                    font-weight: 600;
+                }
+                
+                #HolidayContainer .holiday-link:hover {
+                    text-decoration: underline;
+                }
+                
+                #HolidayContainer .disclaimer {
                     font-size: 14px;
+                    color: #95a5a6;
+                    font-style: italic;
+                    text-align: center;
+                    margin-top: 40px;
                 }
-            }
+                
+                #HolidayContainer .no-upcoming {
+                    background-color: #f9f9f9;
+                    padding: 20px;
+                    border-radius: 5px;
+                    text-align: center;
+                    margin-bottom: 30px;
+                }
+                
+                #HolidayContainer .no-upcoming p {
+                    font-size: 18px;
+                    color: #7f8c8d;
+                }
+                
+                #HolidayContainer .filter-controls {
+                    margin: 20px 0;
+                    display: flex;
+                    justify-content: center;
+                    gap: 15px;
+                    flex-wrap: wrap;
+                }
+                
+                #HolidayContainer .filter-controls select, 
+                #HolidayContainer .filter-controls input {
+                    padding: 12px 15px;
+                    border-radius: 4px;
+                    border: 1px solid #ddd;
+                    font-size: 16px;
+                    min-width: 150px;
+                }
+                
+                #HolidayContainer .filter-controls button {
+                    padding: 12px 20px;
+                    background-color: #3498db;
+                    color: white;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-size: 16px;
+                    transition: background-color 0.3s;
+                }
+                
+                #HolidayContainer .filter-controls button:hover {
+                    background-color: #2980b9;
+                }
+                
+                #HolidayContainer .holiday-count {
+                    text-align: center;
+                    margin-top: 10px;
+                    color: #7f8c8d;
+                }
+                
+                /* Mobile responsiveness */
+                @media (max-width: 768px) {
+                    #HolidayContainer {
+                        padding: 10px;
+                    }
+                    
+                    #HolidayContainer .holiday-table {
+                        display: block;
+                        overflow-x: auto;
+                    }
+                    
+                    #HolidayContainer .filter-controls {
+                        flex-direction: column;
+                        align-items: center;
+                    }
+                    
+                    #HolidayContainer .filter-controls select, 
+                    #HolidayContainer .filter-controls input, 
+                    #HolidayContainer .filter-controls button {
+                        width: 100%;
+                        max-width: 300px;
+                        box-sizing: border-box;
+                    }
+                }
+                
+                @media (max-width: 480px) {
+                    #HolidayContainer .holiday-calculator h1 {
+                        font-size: 24px;
+                    }
+                    
+                    #HolidayContainer .holiday-table th, 
+                    #HolidayContainer .holiday-table td {
+                        padding: 8px 10px;
+                        font-size: 14px;
+                    }
+                    
+                    #HolidayContainer .filter-controls select, 
+                    #HolidayContainer .filter-controls input {
+                        font-size: 14px;
+                        padding: 10px 12px;
+                    }
+                }
+            </style>
+            
+            <div class="logo">
+                <img src="https://via.placeholder.com/200x60?text=US+Holidays" alt="US Holidays Logo">
+            </div>
+            
+            <h1>Upcoming Holidays in the United States</h1>
+            
+            <div class="filter-controls">
+                <select id="month-filter">
+                    <option value="">All Months</option>
+                    <option value="01">January</option>
+                    <option value="02">February</option>
+                    <option value="03">March</option>
+                    <option value="04">April</option>
+                    <option value="05">May</option>
+                    <option value="06">June</option>
+                    <option value="07">July</option>
+                    <option value="08">August</option>
+                    <option value="09">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+                
+                <select id="year-filter">
+                    <option value="2024">2024</option>
+                    <option value="2025" selected>2025</option>
+                    <option value="2026">2026</option>
+                    <option value="2027">2027</option>
+                    <option value="2028">2028</option>
+                </select>
+                
+                <button id="apply-filter">Apply Filter</button>
+                <button id="reset-filter">Reset</button>
+            </div>
+            
+            <div id="upcoming-holidays-container"></div>
+            
+            <p class="disclaimer">Holidays are calculated using the local time in New York.</p>
+        </div>
         `;
-        document.head.appendChild(style);
 
-        // Sample holiday data - replace with your actual data source
+        // Holiday data
         const holidaysData = [
-            [
+        
   {
     "Title": "Abraham Lincoln's Birthday",
     "Target URL": "https://www.almanac.com/abraham-lincoln-almanac-and-murder-trial",
@@ -975,10 +1005,10 @@
     "Target URL": "https://www.almanac.com/national-hot-dog-day",
     "Dates": "2026-07-15 , 2027-07-21 , 2028-07-19"
   }
-]
+
         ];
 
-        // Get current date in YYYY-MM-DD format (local time in New York)
+        // Helper functions
         function getCurrentDateInNY() {
             const nyTime = new Date().toLocaleString("en-US", {timeZone: "America/New_York"});
             const today = new Date(nyTime);
@@ -988,7 +1018,6 @@
             return `${year}-${month}-${day}`;
         }
 
-        // Format date for display
         function formatDateForDisplay(dateStr) {
             const [year, month, day] = dateStr.split('-');
             const monthNames = ["January", "February", "March", "April", "May", "June",
@@ -996,65 +1025,108 @@
             return `${monthNames[parseInt(month) - 1]} ${parseInt(day)}, ${year}`;
         }
 
-        // Get day of week
         function getDayOfWeek(dateStr) {
             const [year, month, day] = dateStr.split('-');
             const date = new Date(year, month - 1, day);
             return date.toLocaleDateString('en-US', { weekday: 'long' });
         }
 
-        // Find holidays for today
-        function getHolidaysForToday() {
+        function getUpcomingHolidays(monthFilter = '', yearFilter = '') {
             const today = getCurrentDateInNY();
-            return holidaysData.filter(holiday => holiday.date === today);
+            const allHolidays = [];
+            
+            holidaysData.forEach(holiday => {
+                holiday.dates.forEach(date => {
+                    if (date >= today) {
+                        const [year, month, day] = date.split('-');
+                        const matchesMonth = !monthFilter || month === monthFilter;
+                        const matchesYear = !yearFilter || year === yearFilter;
+                        
+                        if (matchesMonth && matchesYear) {
+                            allHolidays.push({
+                                date: date,
+                                name: holiday.title,
+                                url: holiday.url
+                            });
+                        }
+                    }
+                });
+            });
+            
+            return allHolidays.sort((a, b) => a.date.localeCompare(b.date));
         }
 
-        // Display today's holidays
-        function displayTodaysHolidays() {
-            const holidaysContainer = document.querySelector('#CalculatorContainer #today-holidays-container');
-            const todaysHolidays = getHolidaysForToday();
-            const today = getCurrentDateInNY();
-            const dayOfWeek = getDayOfWeek(today);
-            const formattedDate = formatDateForDisplay(today);
+        function displayUpcomingHolidays(monthFilter = '', yearFilter = '') {
+            const container = document.getElementById('upcoming-holidays-container');
+            const upcomingHolidays = getUpcomingHolidays(monthFilter, yearFilter);
 
-            if (todaysHolidays.length > 0) {
+            if (upcomingHolidays.length > 0) {
                 let html = `
-                    <div class="hero-box">
-                        <h2>Yes! Today is a holiday!</h2>
-                        <p>Today is ${dayOfWeek}, ${formattedDate} and we're celebrating:</p>
-                        <ul class="holiday-list">
+                    <table class="holiday-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Day</th>
+                                <th>Holiday Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                 `;
 
-                todaysHolidays.forEach(holiday => {
+                upcomingHolidays.forEach(holiday => {
                     html += `
-                        <li>
-                            <span class="holiday-name">
-                                ${holiday.url ? `<a href="${holiday.url}" class="holiday-link" target="_blank">${holiday.name}</a>` : holiday.name}
-                            </span>
-                            ${holiday.type ? `<span class="holiday-type">(${holiday.type})</span>` : ''}
-                            ${holiday.details ? `<span class="holiday-details">${holiday.details}</span>` : ''}
-                        </li>
+                        <tr>
+                            <td>${formatDateForDisplay(holiday.date)}</td>
+                            <td>${getDayOfWeek(holiday.date)}</td>
+                            <td>
+                                ${holiday.url ? `<a href="${holiday.url}" class="holiday-link" target="_blank" rel="noopener">${holiday.name}</a>` : holiday.name}
+                            </td>
+                        </tr>
                     `;
                 });
 
                 html += `
-                        </ul>
-                    </div>
+                        </tbody>
+                    </table>
+                    <div class="holiday-count">Showing ${upcomingHolidays.length} holiday(s)</div>
                 `;
 
-                holidaysContainer.innerHTML = html;
+                container.innerHTML = html;
             } else {
-                holidaysContainer.innerHTML = `
-                    <div class="no-holiday">
-                        <p>There are no holidays in the United States today.</p>
-                        <p>Today is ${dayOfWeek}, ${formattedDate}</p>
+                container.innerHTML = `
+                    <div class="no-upcoming">
+                        <p>No upcoming holidays found for the selected filters.</p>
                     </div>
                 `;
             }
         }
 
         // Initialize the page
-        displayTodaysHolidays();
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current month as default if it exists in the filter
+            const currentMonth = new Date().getMonth() + 1;
+            const monthFilter = document.getElementById('month-filter');
+            if (monthFilter) {
+                monthFilter.value = String(currentMonth).padStart(2, '0');
+            }
+            
+            // Initial display
+            displayUpcomingHolidays();
+            
+            // Set up filter controls
+            document.getElementById('apply-filter').addEventListener('click', function() {
+                const monthFilter = document.getElementById('month-filter').value;
+                const yearFilter = document.getElementById('year-filter').value;
+                displayUpcomingHolidays(monthFilter, yearFilter);
+            });
+            
+            // Reset filters
+            document.getElementById('reset-filter').addEventListener('click', function() {
+                document.getElementById('month-filter').value = '';
+                document.getElementById('year-filter').value = '2025';
+                displayUpcomingHolidays();
+            });
+        });
     </script>
 </body>
 </html>
