@@ -6,7 +6,6 @@
     <title>Today's Holidays in the United States</title>
 </head>
 <body>
-    <!-- Container where the holiday calculator will be inserted -->
     <div id="CalculatorContainer"></div>
 
     <script>
@@ -16,12 +15,8 @@
         // Insert the HTML structure into our container
         container.innerHTML = `
             <div class="holidays-content">
-            
-                
                 <h1 class="holidays-title">Today's Holidays in the United States</h1>
-                
                 <div id="today-holidays-container" class="holidays-results"></div>
-                
                 <p class="disclaimer">Holidays are calculated using the local time in New York.</p>
             </div>
         `;
@@ -29,21 +24,18 @@
         // Add scoped CSS styles
         const style = document.createElement('style');
         style.textContent = `
-            /* Base container styles */
             #CalculatorContainer {
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                 max-width: 100%;
                 box-sizing: border-box;
             }
             
-            /* Content wrapper */
             #CalculatorContainer .holidays-content {
                 max-width: 1200px;
                 margin: 0 auto;
                 padding: 20px;
             }
             
-            /* Title styles */
             #CalculatorContainer .holidays-title {
                 color: #ad2a24;
                 line-height: 1.3;
@@ -51,7 +43,6 @@
                 font-size: 28px;
             }
         
-            /* Holiday box styles */
             #CalculatorContainer .hero-box {
                 background-color: #f8e8e8;
                 border-left: 5px solid #ad2a24;
@@ -66,7 +57,6 @@
                 font-size: 22px;
             }
         
-            /* List styles */
             #CalculatorContainer .holiday-list {
                 list-style-type: none;
                 padding: 0;
@@ -88,7 +78,6 @@
                 top: 0;
             }
         
-            /* Link styles */
             #CalculatorContainer .holiday-link {
                 color: #ad2a24;
                 text-decoration: none;
@@ -99,7 +88,6 @@
                 text-decoration: underline;
             }
         
-            /* Type and details styles */
             #CalculatorContainer .holiday-type {
                 color: #7f8c8d;
                 font-style: italic;
@@ -113,7 +101,6 @@
                 margin: 5px 0 0 0;
             }
         
-            /* No holiday styles */
             #CalculatorContainer .no-holiday {
                 background-color: #f9f9f9;
                 padding: 20px;
@@ -128,7 +115,6 @@
                 margin: 0 0 10px 0;
             }
         
-            /* Disclaimer styles */
             #CalculatorContainer .disclaimer {
                 font-size: 14px;
                 color: #95a5a6;
@@ -137,7 +123,6 @@
                 margin: 40px 0 0 0;
             }
         
-            /* Logo styles */
             #CalculatorContainer .logo {
                 text-align: center;
                 margin: 0 0 30px 0;
@@ -148,8 +133,7 @@
                 height: auto;
                 max-height: 60px;
             }
-        
-            /* Mobile responsiveness */
+            
             @media (max-width: 768px) {
                 #CalculatorContainer .holidays-content {
                     padding: 15px;
@@ -166,12 +150,8 @@
                 #CalculatorContainer .holiday-list li {
                     font-size: 16px;
                 }
-                
-                #CalculatorContainer .no-holiday {
-                    padding: 15px;
-                }
             }
-        
+            
             @media (max-width: 480px) {
                 #CalculatorContainer .holidays-content {
                     padding: 10px;
@@ -185,21 +165,37 @@
                     font-size: 15px;
                     padding-left: 20px;
                 }
-                
-                #CalculatorContainer .hero-box h2 {
-                    font-size: 18px;
-                }
-                
-                #CalculatorContainer .holiday-details {
-                    font-size: 14px;
-                }
             }
         `;
         document.head.appendChild(style);
 
-        // Sample holiday data - replace with your actual data source
-        const holidaysData = [
-            [
+        // Process the Excel data into a usable format
+        function processHolidayData(excelData) {
+            const processedData = [];
+            
+            excelData.forEach(item => {
+                // Skip if no dates
+                if (!item.Dates || item.Dates.trim() === '') return;
+                
+                // Clean up the URL (replace NaN or empty with empty string)
+                let url = item['Target URL'] || '';
+                if (url === ' ' || url === 'NaN') url = '';
+                
+                // Process the dates string into an array
+                const dateArray = item.Dates.split(',').map(date => date.trim());
+                
+                processedData.push({
+                    name: item.Title,
+                    url: url,
+                    dates: dateArray
+                });
+            });
+            
+            return processedData;
+        }
+
+        // Your Excel data converted to JSON format
+        const excelData = [
   {
     "Title": "Abraham Lincoln's Birthday",
     "Target URL": "https://www.almanac.com/abraham-lincoln-almanac-and-murder-trial",
@@ -975,8 +971,10 @@
     "Target URL": "https://www.almanac.com/national-hot-dog-day",
     "Dates": "2026-07-15 , 2027-07-21 , 2028-07-19"
   }
-]
         ];
+
+        // Process the holiday data
+        const holidaysData = processHolidayData(excelData);
 
         // Get current date in YYYY-MM-DD format (local time in New York)
         function getCurrentDateInNY() {
@@ -988,7 +986,7 @@
             return `${year}-${month}-${day}`;
         }
 
-        // Format date for display
+        // Format date for display (e.g., "December 25, 2025")
         function formatDateForDisplay(dateStr) {
             const [year, month, day] = dateStr.split('-');
             const monthNames = ["January", "February", "March", "April", "May", "June",
@@ -996,26 +994,37 @@
             return `${monthNames[parseInt(month) - 1]} ${parseInt(day)}, ${year}`;
         }
 
-        // Get day of week
+        // Get day of week (e.g., "Wednesday")
         function getDayOfWeek(dateStr) {
             const [year, month, day] = dateStr.split('-');
             const date = new Date(year, month - 1, day);
             return date.toLocaleDateString('en-US', { weekday: 'long' });
         }
 
-        // Find holidays for today
-        function getHolidaysForToday() {
-            const today = getCurrentDateInNY();
-            return holidaysData.filter(holiday => holiday.date === today);
+        // Find holidays for a specific date
+        function getHolidaysForDate(date) {
+            const matchingHolidays = [];
+            
+            holidaysData.forEach(holiday => {
+                if (holiday.dates.includes(date)) {
+                    matchingHolidays.push({
+                        name: holiday.name,
+                        url: holiday.url,
+                        type: "", // You can add type if needed
+                        details: "" // You can add details if needed
+                    });
+                }
+            });
+            
+            return matchingHolidays;
         }
 
-        // Display today's holidays
-        function displayTodaysHolidays() {
-            const holidaysContainer = document.querySelector('#CalculatorContainer #today-holidays-container');
-            const todaysHolidays = getHolidaysForToday();
-            const today = getCurrentDateInNY();
-            const dayOfWeek = getDayOfWeek(today);
-            const formattedDate = formatDateForDisplay(today);
+        // Display holidays for a specific date
+        function displayHolidaysForDate(date) {
+            const holidaysContainer = document.getElementById('today-holidays-container');
+            const todaysHolidays = getHolidaysForDate(date);
+            const dayOfWeek = getDayOfWeek(date);
+            const formattedDate = formatDateForDisplay(date);
 
             if (todaysHolidays.length > 0) {
                 let html = `
@@ -1053,8 +1062,9 @@
             }
         }
 
-        // Initialize the page
-        displayTodaysHolidays();
+        // Initialize the page with today's holidays
+        const today = getCurrentDateInNY();
+        displayHolidaysForDate(today);
     </script>
 </body>
 </html>
